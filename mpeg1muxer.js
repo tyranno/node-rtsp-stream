@@ -12,17 +12,25 @@ Mpeg1Muxer = function(options) {
   this.ffmpegOptions = options.ffmpegOptions
   this.exitCode = undefined
   this.additionalFlags = []
+  
+  var includeRE = false
   if (this.ffmpegOptions) {
     for (key in this.ffmpegOptions) {
+      if (key === '-re') {
+        includeRE = true
+        continue
+      }
       this.additionalFlags.push(key)
       if (String(this.ffmpegOptions[key]) !== '') {
         this.additionalFlags.push(String(this.ffmpegOptions[key]))
       }
     }
   }
+  
   this.spawnOptions = [
     "-rtsp_transport",
     "tcp",
+    ...(includeRE ? ["-re"] : []),
     "-i",
     this.url,
     '-f',
