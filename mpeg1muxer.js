@@ -50,7 +50,7 @@ Mpeg1Muxer = function(options) {
     return this.emit('ffmpegStderr', data)
   })
   this.stream.on('exit', (code, signal) => {
-    if (code === 1) {
+    if (code !== 0) {
       console.error('RTSP stream exited with error')
       this.exitCode = 1
       return this.emit('exitWithError')
